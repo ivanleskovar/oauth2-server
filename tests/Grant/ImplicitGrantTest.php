@@ -70,7 +70,7 @@ class ImplicitGrantTest extends TestCase
 
         $request = (new ServerRequest())->withQueryParams([
             'response_type' => 'token',
-            'client_id'     => 'foo',
+            'client_id' => 'foo',
         ]);
 
         $this->assertTrue($grant->canRespondToAuthorizationRequest($request));
@@ -94,8 +94,8 @@ class ImplicitGrantTest extends TestCase
 
         $request = (new ServerRequest())->withQueryParams([
             'response_type' => 'code',
-            'client_id'     => 'foo',
-            'redirect_uri'  => 'http://foo/bar',
+            'client_id' => 'foo',
+            'redirect_uri' => 'http://foo/bar',
         ]);
 
         $this->assertInstanceOf(AuthorizationRequest::class, $grant->validateAuthorizationRequest($request));
@@ -151,7 +151,7 @@ class ImplicitGrantTest extends TestCase
 
         $request = (new ServerRequest())->withQueryParams([
             'response_type' => 'code',
-            'client_id'     => 'foo',
+            'client_id' => 'foo',
         ]);
 
         $this->expectException(\League\OAuth2\Server\Exception\OAuthServerException::class);
@@ -194,8 +194,8 @@ class ImplicitGrantTest extends TestCase
 
         $request = (new ServerRequest())->withQueryParams([
             'response_type' => 'code',
-            'client_id'     => 'foo',
-            'redirect_uri'  => 'http://bar',
+            'client_id' => 'foo',
+            'redirect_uri' => 'http://bar',
         ]);
 
         $this->expectException(\League\OAuth2\Server\Exception\OAuthServerException::class);
