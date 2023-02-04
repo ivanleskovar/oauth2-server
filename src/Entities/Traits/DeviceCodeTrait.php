@@ -26,6 +26,16 @@ trait DeviceCodeTrait
     private $verificationUri;
 
     /**
+     * @var int
+     */
+    private $retryInterval;
+
+    /**
+     * @var DateTimeImmutable
+     */
+    private $lastPolledDateTime;
+
+    /**
      * @return string
      */
     public function getUserCode()
@@ -57,6 +67,59 @@ trait DeviceCodeTrait
     public function setVerificationUri($verificationUri)
     {
         $this->verificationUri = $verificationUri;
+    }
+
+     /**
+     * @return DateTimeImmutable|null
+     */
+    public function getLastPolledDateTime()
+    {
+        return $this->lastPolledDateTime;
+    }
+
+    /**
+     * @param DateTimeImmutable $lastPolledDateTime
+     */
+    public function setLastPolledDateTime($lastPolledDateTime)
+    {
+        $this->lastPolledDateTime = $lastPolledDateTime;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRetryInterval()
+    {
+        return $this->retryInterval;
+    }
+
+    /**
+     * @param int $retryInterval
+     */
+    public function setRetryInterval($retryInterval)
+    {
+        $this->retryInterval = $retryInterval;
+    }
+
+    /**
+     * @param DateTimeImmutable  $nowDateTime
+     * @return int  Slow-down in seconds for the retry interval.
+     */
+    public function checkRetryFrequency(DateTimeImmutable $nowDateTime)
+    {
+        $retryInterval = $this->getRetryInterval();
+
+        if($lastPolleDateTime = $this->getLastPolledDateTime()) {
+            // Seconds passed since last retry.
+            $nowTimestamp = $nowDateTime->getTimestamp();
+            $lastPollingTimestamp = $lastPolleDateTime->getTimestamp();
+
+            if($retryInterval > $nowTimestamp - $lastPollingTimestamp) {
+                return $retryInterval; // polling to fast.
+            }
+        }
+
+        return $slowDownSeconds = 0;
     }
 
     /**
